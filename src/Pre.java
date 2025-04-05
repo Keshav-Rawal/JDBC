@@ -1,14 +1,21 @@
 import java.sql.*;
 
-public class Main{
+
+public class Pre {
+
     public static void main(String [] args) {
         String url = "jdbc:mysql://127.0.0.1:3306/Talbros";
         String username = "root";
         String password = "keshav@123";
+
+
+        int i = 9;
+        String N = "Aditya";
+        double s  = 2344.00;
         String q = "Select*from employee;";// retrieve
-        //String Q = "Insert into employee(id,Name ,salary ) values(9,'Abhi',87887.00);";// Insert
-        //String Q = "Update employee\n"  +"set Name = 'Samrat'\n" + "where id = 9;";//update
-        String Q = "Delete from employee where id = 9;";// Delete
+
+        String Q = "Insert into employee values (?,?,?);";// whatever you insert put a question marks make dynamic
+
 
 
         try{
@@ -22,14 +29,15 @@ public class Main{
         try{
             Connection con = DriverManager.getConnection(url,username,password);
             System.out.println("Connection establish Successfully");
-            Statement stmt = con.createStatement();
-          int rowaffect = stmt.executeUpdate(Q);// Insert the data ,update,delete
-          if(rowaffect>0){
-              System.out.println("Insert successfully " + rowaffect + " Affected");
-          }
-          else{
-              System.out.println("Insertion failed");
-          }
+            PreparedStatement stmt = con.prepareStatement(Q);
+            // And here replace the question marks
+            stmt.setInt(1,i);
+            stmt.setString(2,N);//
+            stmt.setDouble(3,s);
+            stmt.execute();
+
+
+
             ResultSet res = stmt.executeQuery(q);
             while(res.next()){
                 int id = res.getInt("id");
@@ -50,7 +58,4 @@ public class Main{
 
 
     }
-
-
-
 }
